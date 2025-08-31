@@ -25,7 +25,6 @@
     button{background:var(--accent);color:var(--ink);border:0;border-radius:999px;padding:10px 14px;font-weight:600;cursor:pointer;transition:background .2s}
     button:hover{background:var(--accent-2)}
     button.secondary{background:transparent;border:1px solid var(--accent)}
-    .split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
     .notice{margin-top:8px;color:var(--muted);font-size:.9rem}
     .ok{color:var(--ok)} .warn{color:var(--warn)} .danger{color:var(--danger)}
     table{width:100%;border-collapse:collapse;margin-top:10px}
@@ -33,7 +32,7 @@
     th{color:#cfe3ff;font-weight:700}
     .tag{display:inline-block;padding:4px 8px;border-radius:999px;border:1px solid #335a88;background:#0f223b;font-size:.82rem}
     footer{margin-top:16px;color:var(--muted);font-size:.9rem}
-    @media (max-width:780px){.grid,.split{grid-template-columns:1fr} header{flex-direction:column;align-items:flex-start}}
+    @media (max-width:780px){.grid{grid-template-columns:1fr} header{flex-direction:column;align-items:flex-start}}
   </style>
 </head>
 <body>
@@ -45,7 +44,7 @@
 
     <!-- RESERVA -->
     <section class="card">
-      <h2 style="margin-top:0">Reservar Sesión</h2>
+      <h2>Reservar Sesión</h2>
       <div class="grid">
         <div>
           <label for="r-nombre">Nombre</label>
@@ -95,7 +94,7 @@
 
     <!-- FEEDBACK -->
     <section class="card">
-      <h2 style="margin-top:0">Feedback del Cliente</h2>
+      <h2>Feedback del Cliente</h2>
       <div class="grid">
         <div>
           <label for="f-nombre">Nombre</label>
@@ -106,7 +105,7 @@
           <input id="f-sesion" placeholder="Ej.: Evaluación 2025-09-10 10:00">
         </div>
       </div>
-      <label for="f-texto" style="margin-top:10px;display:block">¿Cómo te sentiste? ¿Qué mejoró? ¿Qué te gustaría trabajar?</label>
+      <label for="f-texto">¿Cómo te sentiste? ¿Qué mejoró? ¿Qué te gustaría trabajar?</label>
       <textarea id="f-texto" placeholder="Escribe tu comentario…"></textarea>
       <div class="btns">
         <button id="f-guardar">Guardar feedback</button>
@@ -129,12 +128,18 @@
   </div>
 
   <script>
-    // Utilidades
-    const $ = s => document.querySelector(s);
+    // Helpers
     const saveLS = (k, v) => localStorage.setItem(k, JSON.stringify(v));
     const readLS = (k, fallback) => { try { return JSON.parse(localStorage.getItem(k)) ?? fallback; } catch { return fallback; } };
     const toCSV = (rows) => rows.map(r => r.map(x => `"${String(x).replace(/"/g,'""')}"`).join(',')).join('\\n');
     const dl = (filename, text) => { const a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(text); a.download=filename; a.click(); };
+
+    // VALIDAR EMAIL (corregido)
+    function validarEmail(email) {
+      email = email.trim();
+      const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/;
+      return regex.test(email);
+    }
 
     // RESERVAS
     const R_KEY = 'cap_reservas_v1';
@@ -153,7 +158,6 @@
         rTablaBody.appendChild(tr);
       });
     }
-    function validarEmail(email){ return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email); }
     function guardarReserva(){
       const [nombre,email,fecha,hora,tipo,notas] = rCampos.map(el => el.value.trim());
       rMsg.className='notice'; rMsg.textContent='';

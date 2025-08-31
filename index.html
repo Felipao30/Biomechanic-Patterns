@@ -10,8 +10,7 @@
       --accent:#1e90ff;--accent-2:#4682b4;--ok:#10b981;--warn:#f59e0b;--danger:#ef4444;
     }
     *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,'Helvetica Neue',Arial;
-      background:var(--bg);color:var(--ink)}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,'Helvetica Neue',Arial;background:var(--bg);color:var(--ink)}
     .container{width:min(980px,92%);margin:0 auto;padding:22px 0 40px}
     header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
     h1{margin:0;font-size:clamp(1.4rem,2.5vw,2rem)}
@@ -131,13 +130,13 @@
     // Helpers
     const saveLS = (k, v) => localStorage.setItem(k, JSON.stringify(v));
     const readLS = (k, fallback) => { try { return JSON.parse(localStorage.getItem(k)) ?? fallback; } catch { return fallback; } };
-    const toCSV = (rows) => rows.map(r => r.map(x => `"${String(x).replace(/"/g,'""')}"`).join(',')).join('\\n');
+    const toCSV = (rows) => rows.map(r => r.map(x => `"${String(x).replace(/"/g,'""')}"`).join(',')).join('\n'); // \n correcto
     const dl = (filename, text) => { const a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(text); a.download=filename; a.click(); };
 
-    // VALIDAR EMAIL (corregido)
+    // VALIDAR EMAIL (regex corregido: usa \. no \\.)
     function validarEmail(email) {
       email = email.trim();
-      const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/;
+      const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       return regex.test(email);
     }
 
@@ -158,6 +157,7 @@
         rTablaBody.appendChild(tr);
       });
     }
+
     function guardarReserva(){
       const [nombre,email,fecha,hora,tipo,notas] = rCampos.map(el => el.value.trim());
       rMsg.className='notice'; rMsg.textContent='';
@@ -170,7 +170,9 @@
       renderReservas();
       rMsg.classList.add('ok'); rMsg.textContent='Reserva guardada.';
     }
+
     function limpiarReserva(){ rCampos.forEach(el => el.value=''); rMsg.className='notice'; rMsg.textContent=''; }
+
     function exportarReservas(){
       const rows = [['Nombre','Email','Fecha','Hora','Tipo','Notas'], ...reservas.map(r => [r.nombre,r.email,r.fecha,r.hora,r.tipo,r.notas])];
       dl('reservas.csv', toCSV(rows));
@@ -199,6 +201,7 @@
         fTablaBody.appendChild(tr);
       });
     }
+
     function guardarFeedback(){
       fMsg.className='notice'; fMsg.textContent='';
       const nombre = fNombre.value.trim();
@@ -212,7 +215,9 @@
       fMsg.classList.add('ok'); fMsg.textContent='Feedback guardado.';
       fTexto.value='';
     }
+
     function limpiarFeedback(){ fNombre.value=''; fSesion.value=''; fTexto.value=''; fMsg.className='notice'; fMsg.textContent=''; }
+
     function exportarFeedback(){
       const rows = [['Nombre','Sesión','Comentario','Fecha y hora'], ...feedback.map(f => [f.nombre,f.sesion,f.texto,f.enviado])];
       dl('feedback.csv', toCSV(rows));

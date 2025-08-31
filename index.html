@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portal de Reservas y Feedback — Tu Marca</title>
+  <style>
+    :root{
+      --bg:#0a1a2f;--card:#132742;--ink:#ffffff;--muted:#cbd5e1;
+      --accent:#1e90ff;--accent-2:#4682b4;--ok:#10b981;--warn:#f59e0b;--danger:#ef4444;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,'Helvetica Neue',Arial;
+      background:var(--bg);color:var(--ink)}
+    .container{width:min(980px,92%);margin:0 auto;padding:22px 0 40px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+    h1{margin:0;font-size:clamp(1.4rem,2.5vw,2rem)}
+    .brand{opacity:.9}
+    .card{background:var(--card);border-radius:18px;padding:16px;margin-top:14px;box-shadow:0 10px 28px rgba(0,0,0,.28)}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    label{display:block;margin-bottom:6px;color:var(--muted);font-size:.92rem}
+    input,select,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #234267;background:#0e2038;color:var(--ink);outline:none}
+    textarea{min-height:110px;resize:vertical}
+    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    button{background:var(--accent);color:var(--ink);border:0;border-radius:999px;padding:10px 14px;font-weight:600;cursor:pointer;transition:background .2s}
+    button:hover{background:var(--accent-2)}
+    button.secondary{background:transparent;border:1px solid var(--accent)}
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .notice{margin-top:8px;color:var(--muted);font-size:.9rem}
+    .ok{color:var(--ok)} .warn{color:var(--warn)} .danger{color:var(--danger)}
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{padding:10px;border-bottom:1px solid #254368;text-align:left}
+    th{color:#cfe3ff;font-weight:700}
+    .tag{display:inline-block;padding:4px 8px;border-radius:999px;border:1px solid #335a88;background:#0f223b;font-size:.82rem}
+    footer{margin-top:16px;color:var(--muted);font-size:.9rem}
+    @media (max-width:780px){.grid,.split{grid-template-columns:1fr} header{flex-direction:column;align-items:flex-start}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Portal de Reservas y Feedback <span class="brand">— Tu Marca</span></h1>
+      <div class="tag">Demo Capstone</div>
+    </header>
+
+    <!-- RESERVA -->
+    <section class="card">
+      <h2 style="margin-top:0">Reservar Sesión</h2>
+      <div class="grid">
+        <div>
+          <label for="r-nombre">Nombre</label>
+          <input id="r-nombre" placeholder="Tu nombre" autocomplete="name">
+        </div>
+        <div>
+          <label for="r-email">Email</label>
+          <input id="r-email" type="email" placeholder="tucorreo@ejemplo.com" autocomplete="email">
+        </div>
+        <div>
+          <label for="r-fecha">Fecha</label>
+          <input id="r-fecha" type="date">
+        </div>
+        <div>
+          <label for="r-hora">Hora</label>
+          <input id="r-hora" type="time">
+        </div>
+        <div>
+          <label for="r-tipo">Tipo de sesión</label>
+          <select id="r-tipo">
+            <option value="">Selecciona…</option>
+            <option>Evaluación inicial</option>
+            <option>Corrección postural</option>
+            <option>Patrones de respiración</option>
+            <option>Seguimiento</option>
+          </select>
+        </div>
+        <div>
+          <label for="r-notas">Notas</label>
+          <input id="r-notas" placeholder="Objetivo, molestias, etc.">
+        </div>
+      </div>
+      <div class="btns">
+        <button id="r-guardar">Guardar reserva</button>
+        <button id="r-limpiar" class="secondary">Limpiar</button>
+        <button id="r-exportar" class="secondary">Descargar CSV</button>
+      </div>
+      <div id="r-msg" class="notice"></div>
+      <div class="card" style="margin-top:12px">
+        <strong>Reservas guardadas</strong>
+        <table id="r-tabla">
+          <thead><tr><th>Nombre</th><th>Email</th><th>Fecha</th><th>Hora</th><th>Tipo</th><th>Notas</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- FEEDBACK -->
+    <section class="card">
+      <h2 style="margin-top:0">Feedback del Cliente</h2>
+      <div class="grid">
+        <div>
+          <label for="f-nombre">Nombre</label>
+          <input id="f-nombre" placeholder="Tu nombre">
+        </div>
+        <div>
+          <label for="f-sesion">Sesión relacionada</label>
+          <input id="f-sesion" placeholder="Ej.: Evaluación 2025-09-10 10:00">
+        </div>
+      </div>
+      <label for="f-texto" style="margin-top:10px;display:block">¿Cómo te sentiste? ¿Qué mejoró? ¿Qué te gustaría trabajar?</label>
+      <textarea id="f-texto" placeholder="Escribe tu comentario…"></textarea>
+      <div class="btns">
+        <button id="f-guardar">Guardar feedback</button>
+        <button id="f-limpiar" class="secondary">Limpiar</button>
+        <button id="f-exportar" class="secondary">Descargar CSV</button>
+      </div>
+      <div id="f-msg" class="notice"></div>
+      <div class="card" style="margin-top:12px">
+        <strong>Feedback guardado</strong>
+        <table id="f-tabla">
+          <thead><tr><th>Nombre</th><th>Sesión</th><th>Comentario</th><th>Fecha de envío</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer>
+      Guarda datos solo en tu navegador (localStorage). Para datos reales, usa un backend o Google Sheets.
+    </footer>
+  </div>
+
+  <script>
+    // Utilidades
+    const $ = s => document.querySelector(s);
+    const saveLS = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+    const readLS = (k, fallback) => { try { return JSON.parse(localStorage.getItem(k)) ?? fallback; } catch { return fallback; } };
+    const toCSV = (rows) => rows.map(r => r.map(x => `"${String(x).replace(/"/g,'""')}"`).join(',')).join('\\n');
+    const dl = (filename, text) => { const a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(text); a.download=filename; a.click(); };
+
+    // RESERVAS
+    const R_KEY = 'cap_reservas_v1';
+    const reservas = readLS(R_KEY, []);
+    const rCampos = ['r-nombre','r-email','r-fecha','r-hora','r-tipo','r-notas'].map(id => document.getElementById(id));
+    const rMsg = document.getElementById('r-msg');
+    const rTablaBody = document.querySelector('#r-tabla tbody');
+
+    function renderReservas(){
+      rTablaBody.innerHTML='';
+      reservas.forEach(r => {
+        const tr = document.createElement('tr');
+        [r.nombre,r.email,r.fecha,r.hora,r.tipo,r.notas].forEach(v => {
+          const td = document.createElement('td'); td.textContent = v; tr.appendChild(td);
+        });
+        rTablaBody.appendChild(tr);
+      });
+    }
+    function validarEmail(email){ return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email); }
+    function guardarReserva(){
+      const [nombre,email,fecha,hora,tipo,notas] = rCampos.map(el => el.value.trim());
+      rMsg.className='notice'; rMsg.textContent='';
+      if(!nombre || !email || !fecha || !hora || !tipo){
+        rMsg.classList.add('danger'); rMsg.textContent='Completa nombre, email, fecha, hora y tipo.'; return;
+      }
+      if(!validarEmail(email)){ rMsg.classList.add('danger'); rMsg.textContent='Email no válido.'; return; }
+      reservas.push({nombre,email,fecha,hora,tipo,notas});
+      saveLS(R_KEY, reservas);
+      renderReservas();
+      rMsg.classList.add('ok'); rMsg.textContent='Reserva guardada.';
+    }
+    function limpiarReserva(){ rCampos.forEach(el => el.value=''); rMsg.className='notice'; rMsg.textContent=''; }
+    function exportarReservas(){
+      const rows = [['Nombre','Email','Fecha','Hora','Tipo','Notas'], ...reservas.map(r => [r.nombre,r.email,r.fecha,r.hora,r.tipo,r.notas])];
+      dl('reservas.csv', toCSV(rows));
+    }
+
+    document.getElementById('r-guardar').addEventListener('click', guardarReserva);
+    document.getElementById('r-limpiar').addEventListener('click', limpiarReserva);
+    document.getElementById('r-exportar').addEventListener('click', exportarReservas);
+
+    renderReservas();
+
+    // FEEDBACK
+    const F_KEY = 'cap_feedback_v1';
+    const feedback = readLS(F_KEY, []);
+    const fNombre = document.getElementById('f-nombre');
+    const fSesion = document.getElementById('f-sesion');
+    const fTexto = document.getElementById('f-texto');
+    const fMsg = document.getElementById('f-msg');
+    const fTablaBody = document.querySelector('#f-tabla tbody');
+
+    function renderFeedback(){
+      fTablaBody.innerHTML='';
+      feedback.forEach(f => {
+        const tr=document.createElement('tr');
+        [f.nombre,f.sesion,f.texto,f.enviado].forEach(v => { const td=document.createElement('td'); td.textContent=v; tr.appendChild(td); });
+        fTablaBody.appendChild(tr);
+      });
+    }
+    function guardarFeedback(){
+      fMsg.className='notice'; fMsg.textContent='';
+      const nombre = fNombre.value.trim();
+      const sesion = fSesion.value.trim();
+      const texto = fTexto.value.trim();
+      if(!nombre || !sesion || !texto){ fMsg.classList.add('danger'); fMsg.textContent='Completa nombre, sesión y comentario.'; return; }
+      const enviado = new Date().toLocaleString();
+      feedback.push({nombre, sesion, texto, enviado});
+      saveLS(F_KEY, feedback);
+      renderFeedback();
+      fMsg.classList.add('ok'); fMsg.textContent='Feedback guardado.';
+      fTexto.value='';
+    }
+    function limpiarFeedback(){ fNombre.value=''; fSesion.value=''; fTexto.value=''; fMsg.className='notice'; fMsg.textContent=''; }
+    function exportarFeedback(){
+      const rows = [['Nombre','Sesión','Comentario','Fecha y hora'], ...feedback.map(f => [f.nombre,f.sesion,f.texto,f.enviado])];
+      dl('feedback.csv', toCSV(rows));
+    }
+
+    document.getElementById('f-guardar').addEventListener('click', guardarFeedback);
+    document.getElementById('f-limpiar').addEventListener('click', limpiarFeedback);
+    document.getElementById('f-exportar').addEventListener('click', exportarFeedback);
+
+    renderFeedback();
+  </script>
+</body>
+</html>
